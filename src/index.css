@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+:root {
+  --primary-color: var(@primary-color);
+}
+
+p {
+  line-height: 24px;
+  margin: 0;
+}
+
+/* Atomic css */
+.capitalize {
+  text-transform: capitalize;
+}
+
+.w-4\/5 {
+  width: 80% !important;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.m-0 {
+  margin: 0 !important;
+}
+
+.mb-0\.5 {
+  margin-bottom: 8px;
+}
+
+.ml-1 {
+  margin-left: 16px;
+}
+
+.mr-1 {
+  margin-right: 16px;
+}
+
+.mb-1 {
+  margin-bottom: 16px !important;
+}
+
+.mt-1 {
+  margin-top: 16px !important;
+}
+
+.my-1 {
+  margin-top: 16px !important;
+  margin-bottom: 16px !important;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.flex {
+  display: flex !important;
+}
+
+.items-center {
+  align-items: center !important;
+}
+
+.text-lg {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.75rem; /* 28px */
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.overflow-y-auto {
+  overflow-y: auto !important;
+}
