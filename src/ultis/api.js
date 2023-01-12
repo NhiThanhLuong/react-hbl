@@ -22,6 +22,18 @@ export const postCommentAPI = async ({ post_id, ...params }) =>
     `/hbl-social-main-dev/v1/posts/${post_id}/comments`,
     params
   );
+export const patchCommentAPI = async ({ post_id, postcomment_id, content }) =>
+  await axiosClient.patch(
+    `/hbl-social-main-dev/v1/posts/${post_id}/comments/${postcomment_id}`,
+    {
+      content,
+    }
+  );
+
+export const deleteCommentAPI = async ({ post_id, postcomment_id }) =>
+  await axiosClient.delete(
+    `/hbl-social-main-dev/v1/posts/${post_id}/comments/${postcomment_id}`
+  );
 
 // Profiles
 export const getProfileId = async (account_id) =>

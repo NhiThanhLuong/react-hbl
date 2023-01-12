@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import { lazy } from "react";
-import { DashboardOutlined, UserOutlined } from "@ant-design/icons";
+import { DashboardOutlined } from "@ant-design/icons";
 import _ from "lodash";
 
 const Test = lazy(() => import("containers/Test"));

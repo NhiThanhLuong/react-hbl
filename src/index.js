@@ -14,7 +14,7 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       // notifyOnChangeProps: "tracked",
-      retry: false,
+      retry: 1,
       // suspense: true,
     },
   },

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useMutation } from "@tanstack/react-query";
 import { Button, Card, Form, Input, message, Row, Space } from "antd";
+import { SignUp } from "components";
 import { login } from "features/authSlice";
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -14,7 +15,7 @@ import { _LAYOUT } from "_constants";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { token, loading } = useSelector((state) => state.auth);
+  const [isOpen, setIsOpen] = useState(false);
   const [isSubmiting, setIsSubmiting] = useState(false);
   const username = sessionStorage?.username || "";
 
@@ -136,19 +137,21 @@ const Login = () => {
               // { min: 6, message: "Mật khẩu phải 6 kí tự trở lên" }
             ]}
           >
-            <Input.Password placeholder="Mật khẩu" className="input-login" />
+            <Input.Password placeholder="Password" className="input-login" />
           </Form.Item>
-          <Row direction="row" justify="end" align="center">
+          <Row direction="row" justify="end" align="center" className="gap-2">
+            <Button onClick={() => setIsOpen(true)}>Sign up</Button>
             <Button
               loading={isSubmiting}
               htmlType="submit"
               className="w-100 input-login"
               type="primary"
             >
-              Đăng nhập
+              Log in
             </Button>
           </Row>
         </Form>
+        <SignUp isOpen={isOpen} />
       </Card>
     </div>
   );

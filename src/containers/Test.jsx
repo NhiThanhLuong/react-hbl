@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { Button, Spin } from "antd";
+import { Button, Col, Row, Spin } from "antd";
 import { Post } from "components";
 import { Fragment } from "react";
 import { useEffect } from "react";
@@ -35,26 +35,30 @@ const Test = () => {
 
   return (
     <div className="mt-24">
-      <Spin spinning={isFetching} tip="Loading...">
-        {data?.pages.map((page) => (
-          <Fragment key={page.page}>
-            {page.data.map((item) => (
-              <Post key={item.id} item={item} />
+      <Row>
+        <Col span={18}>
+          <Spin spinning={isFetching} tip="Loading...">
+            {data?.pages.map((page) => (
+              <Fragment key={page.page}>
+                {page.data.map((item) => (
+                  <Post key={item.id} item={item} />
+                ))}
+              </Fragment>
             ))}
-          </Fragment>
-        ))}
-      </Spin>
-      {hasNextPage && (
-        <div className="flex justify-center">
-          <Button
-            onClick={() => fetchNextPage()}
-            disabled={isFetching}
-            type="primary"
-          >
-            Load More...
-          </Button>
-        </div>
-      )}
+          </Spin>
+          {hasNextPage && (
+            <div className="flex justify-center">
+              <Button
+                onClick={() => fetchNextPage()}
+                disabled={isFetching}
+                type="primary"
+              >
+                Load More...
+              </Button>
+            </div>
+          )}
+        </Col>
+      </Row>
     </div>
   );
 };

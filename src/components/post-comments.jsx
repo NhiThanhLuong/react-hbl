@@ -1,23 +1,20 @@
 /* eslint-disable no-unused-vars */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, Divider, Input, Spin } from "antd";
+import { Button, Divider, Form, Input, Spin } from "antd";
 import useInfiniteQueryComment from "hooks/useInfiniteQueryComment";
-import React from "react";
-import { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { postCommentAPI } from "ultis/api";
 import PostComment from "./post-comment";
 
 const PostComments = ({ post_id }) => {
   const queryClient = useQueryClient();
+  const [commentInput, setCommentInput] = useState("");
   const { data, fetchNextPage, isFetching, hasNextPage } =
     useInfiniteQueryComment(post_id);
-
-  console.log(data);
 
   const mutation = useMutation({
     mutationFn: postCommentAPI,
     onSuccess: (data) => {
-      console.log(data);
       queryClient.setQueryData(["infiniteComments", post_id], (oldData) => ({
         ...oldData,
         pages: oldData.pages.map((page) =>
@@ -25,6 +22,7 @@ const PostComments = ({ post_id }) => {
             ? {
                 ...page,
                 data: [data.data, ...page.data],
+                total_count: page.total_count + 1,
               }
             : page
         ),
@@ -33,12 +31,19 @@ const PostComments = ({ post_id }) => {
   });
 
   const postCommentEnter = (e) => {
-    mutation.mutate({
-      post_id,
-      content: e.target.value,
-      sticker_ids: [],
-      type: "text",
-    });
+    mutation.mutate(
+      {
+        post_id,
+        content: e.target.value,
+        sticker_ids: [],
+        type: "text",
+      },
+      {
+        onSuccess: () => {
+          setCommentInput("");
+        },
+      }
+    );
   };
 
   return (
@@ -50,7 +55,7 @@ const PostComments = ({ post_id }) => {
           {data?.pages.map((page) => (
             <Fragment key={page.page}>
               {page.data.map((item) => (
-                <PostComment key={item.id} data={item} />
+                <PostComment key={item.id} data={item} postId={post_id} />
               ))}
             </Fragment>
           ))}
@@ -68,6 +73,8 @@ const PostComments = ({ post_id }) => {
         </div>
         <div className="mt-2">
           <Input
+            value={commentInput}
+            onChange={(e) => setCommentInput(e.target.value)}
             onPressEnter={postCommentEnter}
             placeholder="Write a comment..."
           />

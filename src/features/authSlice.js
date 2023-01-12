@@ -16,6 +16,7 @@ export const authSlice = createSlice({
     login: (state, { payload }) => {
       state.access_token = payload.data.access_token;
       localStorage.setItem("access_token", payload.data.access_token);
+      localStorage.setItem("refresh_token", payload.data.refresh_token);
     },
     logout: (state) => {
       state.token = undefined;
