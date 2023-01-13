@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { storage } from "_constants";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "ultis/api";
+import { toast } from "react-toastify";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const UserInfo = () => {
   const onLogout = () => {
     localStorage.removeItem(storage.access_token);
     localStorage.removeItem(storage.refresh_token);
+    toast.info("You've been logged out");
     navigate("/login", { replace: true });
   };
 

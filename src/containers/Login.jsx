@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { postLogin } from "ultis/api";
+import validator from "ultis/validate";
 
 import { _LAYOUT } from "_constants";
 // import { postLogin } from "features/authSlice";
@@ -26,6 +27,9 @@ const Login = () => {
       dispatch(login(data));
       toast.success("Login Succesful");
       navigate("/test", { replace: true });
+    },
+    onError: () => {
+      toast.error("The Phone Number or Password is Incorrect");
     },
   });
 
@@ -125,19 +129,10 @@ const Login = () => {
             </Space>
           </div>
 
-          <Form.Item
-            name="username"
-            rules={[{ required: false, message: "Không được để trống" }]}
-          >
-            <Input placeholder="Username" className="input-login" />
+          <Form.Item name="username" rules={validator(["required", "number"])}>
+            <Input placeholder="Phone number" className="input-login" />
           </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[
-              { required: false, message: "Không được để trống" },
-              // { min: 6, message: "Mật khẩu phải 6 kí tự trở lên" }
-            ]}
-          >
+          <Form.Item name="password" rules={validator("required")}>
             <Input.Password placeholder="Password" className="input-login" />
           </Form.Item>
           <Row direction="row" justify="end" align="center" className="gap-2">
