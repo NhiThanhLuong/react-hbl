@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, Divider, Form, Input, Spin } from "antd";
+import { Button, Divider, Input, Spin } from "antd";
 import useInfiniteQueryComment from "hooks/useInfiniteQueryComment";
 import React, { Fragment, useState } from "react";
 import { postCommentAPI } from "ultis/api";
@@ -15,6 +14,9 @@ const PostComments = ({ post_id }) => {
   const mutation = useMutation({
     mutationFn: postCommentAPI,
     onSuccess: (data) => {
+      // queryClient.invalidateQueries({
+      //   queryKey: ["infiniteComments", post_id],
+      // });
       queryClient.setQueryData(["infiniteComments", post_id], (oldData) => ({
         ...oldData,
         pages: oldData.pages.map((page) =>

@@ -1,29 +1,29 @@
-/* eslint-disable no-unused-vars */
-import { Col, Dropdown, Menu, Row, Space } from "antd";
-import { DownOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Col, Row } from "antd";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Container, EllipsisMiddle } from "shared_components";
-import { Link, useNavigate } from "react-router-dom";
-import { logout } from "features/authSlice";
+import { Container } from "shared_components";
 import { UserInfo } from "components";
 
 const DefaultHeader = () => {
-  const user_sent = useSelector((state) => state.auth.user_sent);
   return (
     <Container>
-      <Row align="center" gutter={[0]} justify="space-between" wrap={false}>
+      <Row
+        align="center"
+        gutter={[0]}
+        justify="space-between"
+        wrap={false}
+        className="h-full"
+      >
         <Col>
           <img
-            src="/logo.png"
-            width={90}
+            src="/logo192.png"
+            width={60}
             alt=""
             style={{ objectFit: "cover" }}
           />
         </Col>
-        {/* <Col>
-          <UserInfo info={user_sent ? JSON.parse(user_sent) : null} />
-        </Col> */}
+        <Col>
+          <UserInfo />
+        </Col>
       </Row>
     </Container>
   );

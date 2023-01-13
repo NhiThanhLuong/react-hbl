@@ -1,29 +1,28 @@
-// import PropTypes from 'prop-types'
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Row, Col, Dropdown, Button, Menu } from "antd";
+import { Dropdown, Button, Menu } from "antd";
 import { FaUser, FaLock } from "react-icons/fa";
 
-import { imgPath } from "ultis/const";
-import { logout } from "features/authSlice";
-import { useEffect } from "react";
+import { useCallback } from "react";
 import { storage } from "_constants";
+import { useQuery } from "@tanstack/react-query";
+import { getUserProfile } from "ultis/api";
 
-const UserInfo = ({ info }) => {
-  const dispatch = useDispatch();
+const UserInfo = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem(storage.token);
 
-  const { full_name, user_name, role, avatar } = info || {};
+  const { data } = useQuery(["info"], getUserProfile, {
+    select: useCallback((data) => data.data, []),
+  });
 
   const onLogout = () => {
-    dispatch(logout());
+    localStorage.removeItem(storage.access_token);
+    localStorage.removeItem(storage.refresh_token);
     navigate("/login", { replace: true });
   };
 
-  useEffect(() => {
-    if (!token) navigate("/login", { replace: true });
-  }, [token]);
+  // useEffect(() => {
+  //   if (!token) navigate("/login", { replace: true });
+  // }, [token]);
 
   const menu = (
     <Menu
@@ -35,7 +34,7 @@ const UserInfo = ({ info }) => {
         },
         {
           label: (
-            <span onClick={onLogout} aria-hidden="true" role="presentation">
+            <span aria-hidden="true" role="presentation">
               Log Out
             </span>
           ),
@@ -43,6 +42,9 @@ const UserInfo = ({ info }) => {
           icon: <FaLock />,
         },
       ]}
+      onClick={({ key }) => {
+        if (key === "2") onLogout();
+      }}
     />
   );
   return (
@@ -54,7 +56,7 @@ const UserInfo = ({ info }) => {
           padding: 0,
         }}
       >
-        <Row align="middle" gutter={8}>
+        {/* <Row align="middle" gutter={8}>
           <Col>
             <p>{full_name}</p>
             <p>
@@ -64,7 +66,8 @@ const UserInfo = ({ info }) => {
           <Col>
             <img src={imgPath(avatar)} width={32} alt="" />
           </Col>
-        </Row>
+        </Row> */}
+        <p className="text-lg">{data?.fullname}</p>
       </Button>
     </Dropdown>
   );

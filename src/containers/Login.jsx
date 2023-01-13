@@ -1,12 +1,12 @@
-/* eslint-disable no-unused-vars */
 import { useMutation } from "@tanstack/react-query";
 import { Button, Card, Form, Input, message, Row, Space } from "antd";
 import { SignUp } from "components";
 import { login } from "features/authSlice";
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { postLogin } from "ultis/api";
 
 import { _LAYOUT } from "_constants";
@@ -24,6 +24,7 @@ const Login = () => {
     mutationFn: postLogin,
     onSuccess: (data) => {
       dispatch(login(data));
+      toast.success("Login Succesful");
       navigate("/test", { replace: true });
     },
   });
@@ -151,7 +152,7 @@ const Login = () => {
             </Button>
           </Row>
         </Form>
-        <SignUp isOpen={isOpen} />
+        <SignUp isOpen={isOpen} setIsOpen={setIsOpen} />
       </Card>
     </div>
   );

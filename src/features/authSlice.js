@@ -19,10 +19,9 @@ export const authSlice = createSlice({
       localStorage.setItem("refresh_token", payload.data.refresh_token);
     },
     logout: (state) => {
-      state.token = undefined;
-      state.user_sent = undefined;
-      localStorage.removeItem(storage.token);
-      localStorage.removeItem(storage.user_sent);
+      state.access_token = null;
+      localStorage.removeItem(storage.access_token);
+      localStorage.removeItem(storage.refresh_token);
     },
   },
 });

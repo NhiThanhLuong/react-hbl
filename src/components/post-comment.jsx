@@ -1,22 +1,50 @@
-/* eslint-disable no-unused-vars */
 import { MoreOutlined } from "@ant-design/icons";
-import { useQueryClient } from "@tanstack/react-query";
-import { Card, Col, Dropdown, Row, Tooltip } from "antd";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Card, Col, Dropdown, Form, Input, Row, Tooltip } from "antd";
 import React, { useState } from "react";
 import { deleteCommentAPI, patchCommentAPI } from "ultis/api";
+import CancelSave from "./cancel-save";
 
 const PostComment = ({ data, postId }) => {
+  const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const [isEdit, setIsEdit] = useState(false);
 
-  const handleEditComment = (e) => {
-    // console.log(postId);
-    // console.log(data.id);
-    patchCommentAPI({
+  const { isLoading, mutate } = useMutation({
+    mutationFn: patchCommentAPI,
+    onSuccess: ({ data }) => {
+      // queryClient.invalidateQueries({
+      //   queryKey: ["infiniteComments", postId],
+      // });
+      queryClient.setQueryData(["infiniteComments", postId], (oldData) => ({
+        ...oldData,
+        pages: oldData.pages.map((page) => ({
+          ...page,
+          data: page.data.map((comment) =>
+            comment.id === data.id ? data : comment
+          ),
+          total_count: page.total_count - 1,
+        })),
+      }));
+      setIsEdit(false);
+    },
+  });
+
+  const handleCancelEdit = () => {
+    form.resetFields();
+    setIsEdit(false);
+  };
+
+  const handleSaveEdit = () => {
+    mutate({
       post_id: postId,
       postcomment_id: data.id,
-      content: "edited",
+      content: form.getFieldValue("comment"),
     });
+  };
+
+  const handleEditComment = () => {
+    setIsEdit(true);
   };
 
   const handleDeleteComment = async () => {
@@ -24,6 +52,10 @@ const PostComment = ({ data, postId }) => {
       post_id: postId,
       postcomment_id: data.id,
     });
+
+    // queryClient.invalidateQueries({
+    //   queryKey: ["infiniteComments", postId],
+    // });
 
     queryClient.setQueryData(["infiniteComments", postId], (oldData) => ({
       ...oldData,
@@ -38,28 +70,37 @@ const PostComment = ({ data, postId }) => {
   return (
     <Row className="items-center">
       <Col span={22}>
-        <Card
-          className="rounded-3xl mb-2 bg-slate-100"
-          bodyStyle={{
-            padding: 0,
-            marginLeft: 16,
-          }}
-        >
-          {isEdit ? (
-            <span>text</span>
-          ) : (
-            <>
-              <p className="text-blue-600 font-medium">
-                {data.creator.fullname}
-              </p>
-              <p>{data.content}</p>
-              {data.stickers &&
-                data.stickers.map((sticker) => (
-                  <img key={sticker.id} src={sticker.uri} alt="" width={80} />
-                ))}
-            </>
-          )}
-        </Card>
+        {isEdit ? (
+          <Form form={form} disabled={isLoading}>
+            <Form.Item
+              name="comment"
+              initialValue={data.content}
+              className="m-0"
+            >
+              <Input />
+            </Form.Item>
+            <CancelSave
+              className="mb-2"
+              onCancel={handleCancelEdit}
+              onSave={handleSaveEdit}
+            />
+          </Form>
+        ) : (
+          <Card
+            className="rounded-3xl mb-2 bg-slate-100"
+            bodyStyle={{
+              padding: 0,
+              marginLeft: 16,
+            }}
+          >
+            <p className="text-blue-600 font-medium">{data.creator.fullname}</p>
+            <p>{data.content}</p>
+            {data.stickers &&
+              data.stickers.map((sticker) => (
+                <img key={sticker.id} src={sticker.uri} alt="" width={80} />
+              ))}
+          </Card>
+        )}
       </Col>
       <Col span={2} className="text-center">
         <Dropdown

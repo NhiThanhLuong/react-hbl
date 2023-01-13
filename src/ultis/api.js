@@ -7,9 +7,15 @@ export const postLogin = async ({ username, password }) =>
     password,
   });
 
+export const postSignupAPI = async (params) =>
+  await axiosClient.post("/hbl-social-auth-dev/v1/auth/sign-up", params);
+
 // Posts
 export const getPosts = async (params) =>
   await axiosClient.get("/hbl-social-main-dev/v1/posts", { params });
+
+export const postPostsAPI = async (params) =>
+  await axiosClient.post("/hbl-social-main-dev/v1/posts", params);
 
 // Post Comments
 export const getComment = async ({ post_id, ...params }) =>
@@ -36,8 +42,8 @@ export const deleteCommentAPI = async ({ post_id, postcomment_id }) =>
   );
 
 // Profiles
-export const getProfileId = async (account_id) =>
-  await axiosClient.get(`/hbl-social-main-dev/v1/profiles/${account_id}`);
+export const getUserProfile = async () =>
+  await axiosClient.get(`/hbl-social-main-dev/v1/profiles/user-profile`);
 
 export const postFile = async (formData) => {
   return await axiosClient.post("/nadh-mediafile/file", formData, {

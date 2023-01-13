@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Button, Col, Row, Spin } from "antd";
-import { Post } from "components";
+import { CreatePost, Post } from "components";
 import { Fragment } from "react";
-import { useEffect } from "react";
 import { getPosts } from "ultis/api";
 
-const PAGE_SIZE = 1;
+const PAGE_SIZE = 5;
 
 const GetPostsFn = async ({ pageParam = 1 }) => {
   const data = await getPosts({
@@ -37,6 +35,7 @@ const Test = () => {
     <div className="mt-24">
       <Row>
         <Col span={18}>
+          <CreatePost />
           <Spin spinning={isFetching} tip="Loading...">
             {data?.pages.map((page) => (
               <Fragment key={page.page}>
@@ -53,7 +52,7 @@ const Test = () => {
                 disabled={isFetching}
                 type="primary"
               >
-                Load More...
+                <Spin spinning={isFetching}>Load More...</Spin>
               </Button>
             </div>
           )}

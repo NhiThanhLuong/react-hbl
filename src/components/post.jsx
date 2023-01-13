@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Card, Divider } from "antd";
 import React from "react";
 import { PostComments } from "components";
